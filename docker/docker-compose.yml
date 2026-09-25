@@ -1,0 +1,36 @@
+services:
+  isaac:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: il-cooperative-aerial-manipulation:dev
+    # Runtime UID/GID, not a build arg - changing it never triggers a
+    # rebuild. Set by docker/dev.sh from your current `id -u`/`id -g`.
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    environment:
+      HOME: /home/isaac
+      ACCEPT_EULA: "Y"
+      # The extension lives in the bind-mounted repo, so it can't be pip-installed
+      # at build time. Isaac's python.sh preserves an inherited PYTHONPATH, so this
+      # makes IL_mav_carry_ext importable without an install step that `--rm` throws away.
+      PYTHONPATH: /workspace/repo/IL_cooperative_aerial_manipulation_ext/source/IL_mav_carry_ext
+      # $HOME is ephemeral in this container, but acados codegen is a once-per-
+      # machine cost; point the build cache into the bind-mounted repo so it
+      # survives container removal.
+      PYTHON_MPC_CUSADI_CACHE_DIR: /workspace/repo/.cache/python_mpc_cusadi
+    volumes:
+      - ..:/workspace/repo
+      # The image pip-installs -e /opt/python_mpc_cusadi from a build-time COPY, so
+      # without this the container runs whatever was baked in at image build and your
+      # host edits are invisible. Mounting over it makes the editable install live.
+      - ../python_mpc_cusadi:/opt/python_mpc_cusadi
+    working_dir: /workspace/repo
+    stdin_open: true
+    tty: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

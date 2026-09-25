@@ -1,2 +1,17 @@
 run/*.env
 run/output/
+
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+logs/
+outputs/
+videos/
+*.mp4
+
+.vscode/
+.idea/
+.DS_Store
+
+.cache/
