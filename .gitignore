@@ -15,3 +15,5 @@ videos/
 .DS_Store
 
 .cache/
+
+datasets/

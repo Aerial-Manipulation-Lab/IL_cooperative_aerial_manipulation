@@ -9,6 +9,9 @@ services:
     user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
     environment:
       HOME: /home/isaac
+      # The runtime UID has no /etc/passwd entry, so getpass.getuser() (torch's
+      # compile cache asks it for a directory name) raises unless USER is set.
+      USER: isaac
       ACCEPT_EULA: "Y"
       # The extension lives in the bind-mounted repo, so it can't be pip-installed
       # at build time. Isaac's python.sh preserves an inherited PYTHONPATH, so this
