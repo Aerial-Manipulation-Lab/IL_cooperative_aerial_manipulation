@@ -15,3 +15,6 @@ videos/
 
 datasets/
 .venv
+nv_shadercache
+.ruff_cache
+.cache

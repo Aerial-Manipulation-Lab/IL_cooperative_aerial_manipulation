@@ -18,7 +18,9 @@ RUN git clone https://github.com/PriviligedLearningDistributedAerial/acados.git 
     && git checkout ca1a006eaa302ccd14bd266c0751afc3b3a306d3 \
     && git submodule update --recursive --init \
     && mkdir -p build && cd build \
-    && cmake -DACADOS_WITH_QPOASES=ON -DCMAKE_INSTALL_PREFIX=/opt/acados .. \
+    && cmake -DACADOS_WITH_QPOASES=ON -DCMAKE_INSTALL_PREFIX=/opt/acados \
+         -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+         -DCMAKE_C_FLAGS="-D_GNU_SOURCE -fpermissive -w" .. \
     && make install -j"$(nproc)"
 
 # Template renderer used for acados code generation
@@ -36,11 +38,13 @@ RUN ${ISAAC_PY} -m pip install --no-cache-dir \
         pandas \
         cython \
     && ${ISAAC_PY} -m pip install --no-cache-dir -e /opt/acados/interfaces/acados_template \
-    && ${ISAAC_PY} -m pip install --no-cache-dir -e "/opt/python_mpc_cusadi[acados]"
+    && ${ISAAC_PY} -m pip install --no-cache-dir -e "/opt/python_mpc_cusadi[acados]" \
+    && ${ISAAC_PY} -m pip install --no-cache-dir --no-deps "pytorch-tcn==1.2.3"
 
 RUN ${ISAAC_PY} -c "\
 import casadi, pandas, numpy, torch; \
 from acados_template import AcadosOcpSolver; \
+from pytorch_tcn import TCN; \
 import python_mpc_cusadi; \
 print('acados + casadi', casadi.__version__, '| numpy', numpy.__version__, '| torch', torch.__version__)"
 
@@ -49,10 +53,6 @@ ENTRYPOINT []
 
 WORKDIR /workspace
 
-# Runtime UID/GID is passed in at `docker run --user`, not baked into the
-# image, so a rebuild is never needed when your host UID/GID changes. So
-# instead of creating a matching user at build time, just make sure these
-# dirs are writable by whatever UID shows up at runtime.
 RUN mkdir -p "$HOME/.cache/ov" \
              "$HOME/.cache/pip" \
              "$HOME/.cache/nvidia/GLCache" \

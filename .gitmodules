@@ -1,3 +1,6 @@
 [submodule "IL_cooperative_aerial_manipulation_ext"]
 	path = IL_cooperative_aerial_manipulation_ext
 	url = git@github.com:Aerial-Manipulation-Lab/IL_cooperative_aerial_manipulation_ext.git
+[submodule "python_mpc_cusadi"]
+	path = python_mpc_cusadi
+	url = git@github.com:Aerial-Manipulation-Lab/python_mpc_cusadi.git
