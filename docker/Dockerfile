@@ -38,13 +38,11 @@ RUN ${ISAAC_PY} -m pip install --no-cache-dir \
         pandas \
         cython \
     && ${ISAAC_PY} -m pip install --no-cache-dir -e /opt/acados/interfaces/acados_template \
-    && ${ISAAC_PY} -m pip install --no-cache-dir -e "/opt/python_mpc_cusadi[acados]" \
-    && ${ISAAC_PY} -m pip install --no-cache-dir --no-deps "pytorch-tcn==1.2.3"
+    && ${ISAAC_PY} -m pip install --no-cache-dir -e "/opt/python_mpc_cusadi[acados]"
 
 RUN ${ISAAC_PY} -c "\
 import casadi, pandas, numpy, torch; \
 from acados_template import AcadosOcpSolver; \
-from pytorch_tcn import TCN; \
 import python_mpc_cusadi; \
 print('acados + casadi', casadi.__version__, '| numpy', numpy.__version__, '| torch', torch.__version__)"
 
