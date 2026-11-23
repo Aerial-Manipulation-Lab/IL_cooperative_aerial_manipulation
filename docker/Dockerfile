@@ -12,26 +12,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential cmake git curl ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Clone acados
-RUN git clone https://github.com/PriviligedLearningDistributedAerial/acados.git /opt/acados \
+# acados v0.6.0, with OpenMP for its batch calls
+RUN git clone --branch v0.6.0 --depth 1 https://github.com/acados/acados.git /opt/acados \
     && cd /opt/acados \
-    && git checkout ca1a006eaa302ccd14bd266c0751afc3b3a306d3 \
-    && git submodule update --recursive --init \
+    && git submodule update --recursive --init --depth 1 \
     && mkdir -p build && cd build \
-    && cmake -DACADOS_WITH_QPOASES=ON -DCMAKE_INSTALL_PREFIX=/opt/acados \
-         -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+    && cmake -DACADOS_WITH_QPOASES=ON -DACADOS_WITH_OPENMP=ON -DACADOS_NUM_THREADS=1 \
+         -DCMAKE_INSTALL_PREFIX=/opt/acados -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
          -DCMAKE_C_FLAGS="-D_GNU_SOURCE -fpermissive -w" .. \
     && make install -j"$(nproc)"
 
-# Template renderer used for acados code generation
+# Template renderer used for acados code generation, the release acados v0.6.0 expects
 RUN mkdir -p /opt/acados/bin \
-    && curl -sSL https://github.com/acados/tera_renderer/releases/download/v0.0.34/t_renderer-v0.0.34-linux \
+    && curl -sSL https://github.com/acados/tera_renderer/releases/download/v0.2.1/t_renderer-v0.2.1-linux-amd64 \
          -o /opt/acados/bin/t_renderer \
     && chmod +x /opt/acados/bin/t_renderer
 
-# Intsall python dependencies, into Isaac's own site-packages
-
-
+# Install the python dependencies into Isaac's own site-packages. The compose file mounts the
+# submodule over /opt/python_mpc_cusadi, so the editable install follows the checkout.
 COPY python_mpc_cusadi /opt/python_mpc_cusadi
 RUN ${ISAAC_PY} -m pip install --no-cache-dir \
         "casadi==3.6.7" \

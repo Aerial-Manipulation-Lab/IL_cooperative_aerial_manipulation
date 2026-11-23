@@ -6,15 +6,20 @@ logs/
 outputs/
 videos/
 *.mp4
+datasets/
 
 .vscode/
 .idea/
 .DS_Store
+._*
 
 .cache/
-
-datasets/
 .venv
-nv_shadercache
 .ruff_cache
-.cache
+nv_shadercache
+shadercache
+
+# notes, the report and slides live outside this repo
+experiments.md
+report/
+figures/

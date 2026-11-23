@@ -1,0 +1,19 @@
+# The image only needs python_mpc_cusadi (COPY); the extension is mounted at run time.
+.git
+logs
+outputs
+videos
+datasets
+.cache
+.venv
+experiments.md
+report
+figures
+IL_cooperative_aerial_manipulation_ext
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+**/*.egg-info
+python_mpc_cusadi/.venv
+nv_shadercache
+shadercache
