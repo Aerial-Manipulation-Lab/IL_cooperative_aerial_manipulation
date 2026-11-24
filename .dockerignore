@@ -1,4 +1,4 @@
-# The image only needs python_mpc_cusadi (COPY); the extension is mounted at run time.
+# The image only needs batched_caml_nmpc (COPY); the extension is mounted at run time.
 .git
 logs
 outputs
@@ -14,6 +14,6 @@ IL_cooperative_aerial_manipulation_ext
 **/.pytest_cache
 **/.ruff_cache
 **/*.egg-info
-python_mpc_cusadi/.venv
+batched_caml_nmpc/.venv
 nv_shadercache
 shadercache

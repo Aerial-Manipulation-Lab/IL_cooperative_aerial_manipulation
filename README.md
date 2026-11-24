@@ -9,7 +9,7 @@ This repository holds the Docker setup and pins the two code repositories as sub
 | Submodule | What it is |
 |---|---|
 | `IL_cooperative_aerial_manipulation_ext` | Isaac Lab extension: the flycrane task, the teacher, the students, DAgger, offline training and validation scripts |
-| `python_mpc_cusadi` | Sun's NMPC, batched over environments and solved by acados on CPU threads |
+| `batched_caml_nmpc` | Sun's NMPC, batched over environments and solved by acados on CPU threads |
 
 ## Quick start
 
@@ -31,7 +31,7 @@ Then fly the teacher along the Medium figure eight; the video lands in `videos/`
 The image is a development environment: it holds Isaac Lab, acados and the Python dependencies,
 and the compose file mounts this checkout into the container, so it runs the code as checked out
 (both submodules). The first run that uses the teacher generates and compiles the acados solver,
-about a minute, cached in `.cache/python_mpc_cusadi`. There is no GUI in the container; flights are
+about a minute, cached in `.cache/batched_caml_nmpc`. There is no GUI in the container; flights are
 watched as videos.
 
 ## Running

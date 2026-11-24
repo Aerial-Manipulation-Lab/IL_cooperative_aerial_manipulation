@@ -10,10 +10,10 @@ services:
       USER: isaac
       ACCEPT_EULA: "Y"
       PYTHONPATH: /workspace/repo/IL_cooperative_aerial_manipulation_ext/source/IL_mav_carry_ext
-      PYTHON_MPC_CUSADI_CACHE_DIR: /workspace/repo/.cache/python_mpc_cusadi
+      BATCHED_CAML_NMPC_CACHE_DIR: /workspace/repo/.cache/batched_caml_nmpc
     volumes:
       - ..:/workspace/repo
-      - ../python_mpc_cusadi:/opt/python_mpc_cusadi
+      - ../batched_caml_nmpc:/opt/batched_caml_nmpc
     working_dir: /workspace/repo
     stdin_open: true
     tty: true

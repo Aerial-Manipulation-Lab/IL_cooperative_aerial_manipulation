@@ -29,19 +29,19 @@ RUN mkdir -p /opt/acados/bin \
     && chmod +x /opt/acados/bin/t_renderer
 
 # Install the python dependencies into Isaac's own site-packages. The compose file mounts the
-# submodule over /opt/python_mpc_cusadi, so the editable install follows the checkout.
-COPY python_mpc_cusadi /opt/python_mpc_cusadi
+# submodule over /opt/batched_caml_nmpc, so the editable install follows the checkout.
+COPY batched_caml_nmpc /opt/batched_caml_nmpc
 RUN ${ISAAC_PY} -m pip install --no-cache-dir \
         "casadi==3.6.7" \
         pandas \
         cython \
     && ${ISAAC_PY} -m pip install --no-cache-dir -e /opt/acados/interfaces/acados_template \
-    && ${ISAAC_PY} -m pip install --no-cache-dir -e "/opt/python_mpc_cusadi[acados]"
+    && ${ISAAC_PY} -m pip install --no-cache-dir -e "/opt/batched_caml_nmpc[acados]"
 
 RUN ${ISAAC_PY} -c "\
 import casadi, pandas, numpy, torch; \
 from acados_template import AcadosOcpSolver; \
-import python_mpc_cusadi; \
+import batched_caml_nmpc; \
 print('acados + casadi', casadi.__version__, '| numpy', numpy.__version__, '| torch', torch.__version__)"
 
 
