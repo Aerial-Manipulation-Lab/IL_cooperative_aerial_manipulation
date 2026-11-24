@@ -1,72 +1,67 @@
-# IL_cooperative_aerial_manipulation
+# Imitation Learning for Cooperative Aerial Manipulation
 
-Imitation learning for cooperative aerial manipulation: three drones carry one payload on cables, and
-each drone flies its own student policy, trained by DAgger to imitate Sun's centralised NMPC. The
-training runs in Isaac Lab with many environments in parallel.
+![version](https://img.shields.io/badge/version-0.1.1-blue)
+![isaac lab](https://img.shields.io/badge/Isaac%20Lab-3.0.0-76b900)
+![acados](https://img.shields.io/badge/acados-v0.6.0-orange)
 
-This repository holds the Docker setup and pins the two code repositories as submodules:
+Author: Paco Pronk
 
-| Submodule | What it is |
-|---|---|
-| `IL_cooperative_aerial_manipulation_ext` | Isaac Lab extension: the flycrane task, the teacher, the students, DAgger, offline training and validation scripts |
-| `batched_caml_nmpc` | Sun's NMPC, batched over environments and solved by acados on CPU threads |
+This repository contains everything that is needed to train student policies for a team
+of drones that carry a load suspended on cables. It defines the Docker image in which
+the training runs, and it pins the two code repositories as submodules, at versions that
+work together:
 
-## Quick start
+- [CAML Lab](https://github.com/Aerial-Manipulation-Lab/IL_cooperative_aerial_manipulation_ext)
+  is the Isaac Lab extension that trains and validates the students.
+- [Batched CAML NMPC](https://github.com/Aerial-Manipulation-Lab/batched_caml_nmpc) is
+  the NMPC that the students learn to imitate, and runs in many simulated environments
+  at the same time.
 
-Requirements: an NVIDIA GPU with its driver, Docker with Compose and the NVIDIA Container Toolkit, and
-access to `nvcr.io/nvidia/isaac-lab:3.0.0-beta2-post1`.
+## Requirements
+
+- An NVIDIA RTX GPU with a recent driver
+- Docker with Docker Compose
+- The NVIDIA Container Toolkit
+- Access to the Isaac Lab image `nvcr.io/nvidia/isaac-lab:3.0.0`
+
+## Installation
+
+Clone the repository together with its submodules, and build the image:
 
 ```bash
 git clone --recursive git@github.com:Aerial-Manipulation-Lab/IL_cooperative_aerial_manipulation.git
-cd IL_cooperative_aerial_manipulation && ./docker/dev.sh build
+cd IL_cooperative_aerial_manipulation
+./docker/dev.sh build
 ```
 
-Then fly the teacher along the Medium figure eight; the video lands in `videos/`:
-
-```bash
-./docker/dev.sh run --rm isaac bash -c '$ISAAC_PY IL_cooperative_aerial_manipulation_ext/scripts/play.py \
-    --task Flycrane-FigureEightMedium-v0 --teacher --headless --video'
-```
-
-The image is a development environment: it holds Isaac Lab, acados and the Python dependencies,
-and the compose file mounts this checkout into the container, so it runs the code as checked out
-(both submodules). The first run that uses the teacher generates and compiles the acados solver,
-about a minute, cached in `.cache/batched_caml_nmpc`. There is no GUI in the container; flights are
-watched as videos.
+The image contains Isaac Lab, acados and the Python dependencies. The compose file
+mounts this checkout into the container, so changes to the code take effect without
+rebuilding the image. The first run that uses the teacher compiles its solver, which
+takes about a minute, and caches the result in `.cache/batched_caml_nmpc`. The container
+has no GUI, so flights can only be watched as recorded videos.
 
 ## Running
 
-Every script runs in the container from the repository root, and writes to `logs/`:
+The scripts run inside the container, from the root of this repository, and write their
+results to `logs/`. For example, to train a student and then validate it:
 
 ```bash
-# DAgger: train a student against the teacher, 8 environments in parallel
-./docker/dev.sh run --rm isaac bash -c '$ISAAC_PY IL_cooperative_aerial_manipulation_ext/scripts/dagger.py \
-    --task Flycrane-RandomTrajectoryFastHeavy-v0 --student baseline --dagger decay --num_envs 8 \
-    --run_name my-run --headless'
+./docker/dev.sh run --rm isaac bash -c '$ISAAC_PY \
+    IL_cooperative_aerial_manipulation_ext/scripts/dagger.py \
+    --headless --student baseline --run_name <run_name>'
 
-# Validate a student on every test reference, 4 flights each
-./docker/dev.sh run --rm isaac bash -c '$ISAAC_PY IL_cooperative_aerial_manipulation_ext/scripts/validate.py \
-    --checkpoint logs/dagger/my-run/round_024.pt --flights 4 --headless'
-
-# Fly a trained student instead of the teacher
-./docker/dev.sh run --rm isaac bash -c '$ISAAC_PY IL_cooperative_aerial_manipulation_ext/scripts/play.py \
-    --task Flycrane-FigureEightMedium-v0 --checkpoint logs/dagger/my-run/round_024.pt --headless --video'
-
-# The teacher on the same references
-./docker/dev.sh run --rm isaac bash -c '$ISAAC_PY IL_cooperative_aerial_manipulation_ext/scripts/validate.py \
-    --teacher --flights 4 --headless'
-
-# Train a student offline on the recorded flights of one or more DAgger runs
-./docker/dev.sh run --rm isaac bash -c '$ISAAC_PY IL_cooperative_aerial_manipulation_ext/scripts/train.py \
-    logs/dagger/my-run/rollouts --student load_reference_cable_direction --run_name my-offline-run'
+./docker/dev.sh run --rm isaac bash -c '$ISAAC_PY \
+    IL_cooperative_aerial_manipulation_ext/scripts/validate.py \
+    --headless --checkpoint logs/dagger/<run_name>/student.pt'
 ```
 
-The students' input sets are in `STUDENTS`, the DAgger and offline training settings in `DAGGER`
-and `TRAINING` (`imitation/configs.py`), and the test references in `VALIDATION`.
+The [README of CAML Lab](https://github.com/Aerial-Manipulation-Lab/IL_cooperative_aerial_manipulation_ext#readme)
+describes all scripts and their options.
 
 ## Versions
 
-v0.1.0: Isaac Lab 3.0.0-beta2-post1, acados v0.6.0, CasADi 3.6.7.
+Version 0.1.1 pins CAML Lab v0.1.1 and Batched CAML NMPC v0.1.1, and uses Isaac Lab
+3.0.0, acados v0.6.0 and CasADi 3.6.7.
 
 ## Licence
 

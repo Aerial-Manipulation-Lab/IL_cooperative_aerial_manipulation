@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/isaac-lab:3.0.0-beta2-post1
+FROM nvcr.io/nvidia/isaac-lab:3.0.0
 
 ENV ISAAC_PY=/workspace/isaaclab/_isaac_sim/python.sh
 ENV ACCEPT_EULA=Y
