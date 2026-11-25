@@ -17,16 +17,15 @@ work together:
   the NMPC that the students learn to imitate, and runs in many simulated environments
   at the same time.
 
-[![A student flies the load along a figure eight](media/figure_8_flight_student.gif)](media/figure_8_flight_student.mp4)
+https://github.com/user-attachments/assets/af78dd26-105b-4cb3-999c-2c7608e4c5a9
 
 *A student flies the load along a figure eight in Isaac Lab. The yellow dots show the
-reference trajectory of the load. Click the image to watch the whole flight.*
+reference trajectory of the load.*
 
-[![512 flycranes fly random walks at the same time](media/random_walks_512_envs.gif)](media/random_walks_512_envs.mp4)
+https://github.com/user-attachments/assets/eafa3cab-8295-4f16-be8a-10577e1df36e
 
-*512 flycranes fly random walks at the Fast level side by side, and all of them are flown by
-the same student. The yellow line shows the next 5 seconds of the reference trajectory of
-each load. Click the image to watch the video of 18 seconds.*
+*512 flycranes train on random walks at the Fast level. The yellow line shows the next 5 seconds of the reference trajectory of
+each load.*
 
 ## Requirements
 
