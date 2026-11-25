@@ -11,6 +11,8 @@ services:
       ACCEPT_EULA: "Y"
       PYTHONPATH: /workspace/repo/IL_cooperative_aerial_manipulation_ext/source/IL_mav_carry_ext
       BATCHED_CAML_NMPC_CACHE_DIR: /workspace/repo/.cache/batched_caml_nmpc
+      # One OpenBLAS thread: Kit forks at startup, and OpenBLAS's worker threads crash that fork.
+      OPENBLAS_NUM_THREADS: "1"
     volumes:
       - ..:/workspace/repo
       - ../batched_caml_nmpc:/opt/batched_caml_nmpc

@@ -20,7 +20,12 @@ work together:
 [![A student flying the payload along a figure eight](media/figure_8_flight_student.gif)](media/figure_8_flight_student.mp4)
 
 *A student flying the payload along a figure eight in Isaac Lab; the yellow dots trace its reference.
-Click for the whole 40 s flight.*
+Click for the whole flight.*
+
+[![512 flycranes flying random walks at once](media/random_walks_512_envs.gif)](media/random_walks_512_envs.mp4)
+
+*512 flycranes flying Fast random walks side by side, each flown by the same student; the yellow
+line is the next 5 s of each payload's reference. Click for the 18 s video.*
 
 ## Requirements
 
