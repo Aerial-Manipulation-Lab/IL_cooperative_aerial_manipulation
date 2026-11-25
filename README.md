@@ -46,9 +46,10 @@ cd IL_cooperative_aerial_manipulation
 
 The image contains Isaac Lab, acados and the Python dependencies. The compose file
 mounts this checkout into the container, so changes to the code take effect without
-rebuilding the image. The first run that uses the teacher compiles its solver, which
-takes about a minute, and caches the result in `.cache/batched_caml_nmpc`. The container
-has no GUI, so flights can only be watched as recorded videos.
+rebuilding the image. The first time the teacher is used, acados generates and compiles
+the code of the solver. This takes about a minute, and the compiled code is cached in
+`.cache/batched_caml_nmpc`, so later runs start quickly. The container has no GUI, so
+flights can only be watched as recorded videos.
 
 ## Running
 
