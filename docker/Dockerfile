@@ -1,6 +1,7 @@
 FROM nvcr.io/nvidia/isaac-lab:3.0.0
 
-ENV ISAAC_PY=/workspace/isaaclab/_isaac_sim/python.sh
+# Isaac Lab 3.0.0 lives in its own venv; its CLI runs that venv's Python with Isaac Sim on the path.
+ENV ISAAC_PY="uv run isaaclab -p"
 ENV ACCEPT_EULA=Y
 ENV ACADOS_SOURCE_DIR=/opt/acados
 ENV LD_LIBRARY_PATH=/opt/acados/lib
@@ -28,15 +29,17 @@ RUN mkdir -p /opt/acados/bin \
          -o /opt/acados/bin/t_renderer \
     && chmod +x /opt/acados/bin/t_renderer
 
-# Install the python dependencies into Isaac's own site-packages. The compose file mounts the
+# Install the python dependencies into Isaac Lab's venv. The compose file mounts the
 # submodule over /opt/batched_caml_nmpc, so the editable install follows the checkout.
 COPY batched_caml_nmpc /opt/batched_caml_nmpc
-RUN ${ISAAC_PY} -m pip install --no-cache-dir \
+RUN ${VIRTUAL_ENV}/bin/python -m pip install --no-cache-dir \
         "casadi==3.6.7" \
         pandas \
         cython \
-    && ${ISAAC_PY} -m pip install --no-cache-dir -e /opt/acados/interfaces/acados_template \
-    && ${ISAAC_PY} -m pip install --no-cache-dir -e "/opt/batched_caml_nmpc[acados]"
+        "moviepy>=1.0.3,<2.0.0.dev0" \
+        imageio-ffmpeg \
+    && ${VIRTUAL_ENV}/bin/python -m pip install --no-cache-dir -e /opt/acados/interfaces/acados_template \
+    && ${VIRTUAL_ENV}/bin/python -m pip install --no-cache-dir -e "/opt/batched_caml_nmpc[acados]"
 
 RUN ${ISAAC_PY} -c "\
 import casadi, pandas, numpy, torch; \

@@ -6,6 +6,7 @@ logs/
 outputs/
 videos/
 *.mp4
+!media/*.mp4
 datasets/
 
 .vscode/

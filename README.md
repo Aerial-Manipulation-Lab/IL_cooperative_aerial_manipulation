@@ -17,6 +17,11 @@ work together:
   the NMPC that the students learn to imitate, and runs in many simulated environments
   at the same time.
 
+[![A student flying the payload along a figure eight](media/figure_8_flight_student.gif)](media/figure_8_flight_student.mp4)
+
+*A student flying the payload along a figure eight in Isaac Lab; the yellow dots trace its reference.
+Click for the whole 40 s flight.*
+
 ## Requirements
 
 - An NVIDIA RTX GPU with a recent driver
@@ -48,11 +53,11 @@ results to `logs/`. For example, to train a student and then validate it:
 ```bash
 ./docker/dev.sh run --rm isaac bash -c '$ISAAC_PY \
     IL_cooperative_aerial_manipulation_ext/scripts/dagger.py \
-    --headless --student baseline --run_name <run_name>'
+    --student baseline --run_name <run_name>'
 
 ./docker/dev.sh run --rm isaac bash -c '$ISAAC_PY \
     IL_cooperative_aerial_manipulation_ext/scripts/validate.py \
-    --headless --checkpoint logs/dagger/<run_name>/student.pt'
+    --checkpoint logs/dagger/<run_name>/student.pt'
 ```
 
 The [README of CAML Lab](https://github.com/Aerial-Manipulation-Lab/IL_cooperative_aerial_manipulation_ext#readme)
