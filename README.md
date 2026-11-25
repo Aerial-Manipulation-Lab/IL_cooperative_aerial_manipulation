@@ -17,15 +17,16 @@ work together:
   the NMPC that the students learn to imitate, and runs in many simulated environments
   at the same time.
 
-[![A student flying the payload along a figure eight](media/figure_8_flight_student.gif)](media/figure_8_flight_student.mp4)
+[![A student flies the load along a figure eight](media/figure_8_flight_student.gif)](media/figure_8_flight_student.mp4)
 
-*A student flying the payload along a figure eight in Isaac Lab; the yellow dots trace its reference.
-Click for the whole flight.*
+*A student flies the load along a figure eight in Isaac Lab. The yellow dots show the
+reference trajectory of the load. Click the image to watch the whole flight.*
 
-[![512 flycranes flying random walks at once](media/random_walks_512_envs.gif)](media/random_walks_512_envs.mp4)
+[![512 flycranes fly random walks at the same time](media/random_walks_512_envs.gif)](media/random_walks_512_envs.mp4)
 
-*512 flycranes flying Fast random walks side by side, each flown by the same student; the yellow
-line is the next 5 s of each payload's reference. Click for the 18 s video.*
+*512 flycranes fly random walks at the Fast level side by side, and all of them are flown by
+the same student. The yellow line shows the next 5 seconds of the reference trajectory of
+each load. Click the image to watch the video of 18 seconds.*
 
 ## Requirements
 
